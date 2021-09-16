@@ -40,3 +40,29 @@ SELECT h.hacker_id, h.name
     GROUP BY h.hacker_id
         HAVING COUNT(s.hacker_id) > 1
     ORDER BY COUNT(s.hacker_id) DESC, s.hacker_id ASC
+
+
+SELECT contest_id, hacker_id, name,
+SUM(total_submissions) total_submissions,SUM(total_accepted_submissions) total_accepted_submissions,
+SUM(TOTAL_VIEWS) TOTAL_VIEWS,SUM(TOTAL_UNIQUE_VIEWS) TOTAL_UNIQUE_VIEWS
+FROM(
+SELECT A.contest_id, A.hacker_id, A.name,
+0 total_submissions,0 total_accepted_submissions,
+SUM(D.TOTAL_VIEWS) TOTAL_VIEWS, SUM(D.TOTAL_UNIQUE_VIEWS) TOTAL_UNIQUE_VIEWS
+FROM CONTESTS A, Colleges B,Challenges C,View_Stats D
+WHERE A.contest_id=B.contest_id
+AND B.COLLEGE_ID=C.COLLEGE_ID
+AND C.CHALLENGE_ID=D.CHALLENGE_ID
+GROUP BY A.contest_id, A.hacker_id, A.name
+UNION
+SELECT A.contest_id, A.hacker_id, A.name,
+SUM(total_submissions) total_submissions,SUM(total_accepted_submissions) total_accepted_submissions,
+0 TOTAL_VIEWS,0 TOTAL_UNIQUE_VIEWS
+FROM CONTESTS A, Colleges B,Challenges C,Submission_Stats  D
+WHERE A.contest_id=B.contest_id
+AND B.COLLEGE_ID=C.COLLEGE_ID
+AND C.CHALLENGE_ID=D.CHALLENGE_ID
+GROUP BY A.contest_id, A.hacker_id, A.name)
+GROUP BY contest_id, hacker_id, name
+HAVING SUM(total_submissions) +SUM(total_accepted_submissions) +SUM(TOTAL_VIEWS)+SUM(TOTAL_UNIQUE_VIEWS)<>0
+ORDER BY 1;

@@ -1,0 +1,10 @@
+1. Use http://localhost/8080 to connect to jenkins server
+2. Use admin as username 
+3. Fetch password from project file (url given). Copy paste it on url search of a browser and hot enter to get the password to the jenkins server.
+4. Login and click new build. Give name to the project. Freestyle project.
+5. Click on Add ->Jenkins. Then get the username(katacoda) and password from the project file. Then OK. On the left ensure the username and password reflects.
+6. Scroll down to build. Click build setup to Execute Shell.
+7. Copy paste the two shell commands from the project file.
+8. Select Git server
+9. Then save
+10. Go to the build -> console output. Check status as success.
